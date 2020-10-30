@@ -1,7 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
 const postsRoutes = require('./routes/posts')
 
 
@@ -12,7 +11,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.M
     console.log('Connected to database');
   })
   .catch(() => {
-    console.log('Connection failed !');
+    console.log('Connection failed -- !!!');
 
   });
 

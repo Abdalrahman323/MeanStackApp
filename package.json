@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start_local": "nodemon server.js"
+    "start_local": "nodemon -r dotenv/config server.js"
   },
   "private": true,
   "dependencies": {
