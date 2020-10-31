@@ -3,7 +3,7 @@ import { Post } from './../post.model';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-
+import {mimeType} from "./mime-type.validator"
 @Component({
   selector: 'post-create',
   templateUrl: './post-create.component.html',
@@ -15,6 +15,7 @@ export class PostCreateComponent implements OnInit {
   isLoading = false;
 
   form: FormGroup;
+  imagePreview;
 
   private mode = 'create'
   private postId: string;
@@ -57,7 +58,7 @@ export class PostCreateComponent implements OnInit {
     this.form = new FormGroup({
       'title': new FormControl( null,{validators:[Validators.required,Validators.minLength(3)]}),
       'content': new FormControl(null,{validators:[Validators.required]}),
-      'image': new FormControl(null , {validators: Validators.required})
+      'image': new FormControl(null , {validators: [Validators.required],asyncValidators:[mimeType]})
 
     });
 
@@ -68,8 +69,15 @@ export class PostCreateComponent implements OnInit {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({'image':file});
     this.form.get('image').updateValueAndValidity();  // tell angular to re evalute this form control , as i change the value
-    console.log(file);
-    console.log(this.form);
+
+    const reader = new FileReader();
+    // this fn will executed when done reading the file
+    // it's async code , so we used callback fn asigned to onload
+    reader.onload=()=>{
+      this.imagePreview = reader.result
+    }
+
+    reader.readAsDataURL(file);
 
 
   }
