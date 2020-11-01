@@ -1,32 +1,70 @@
 const exprss = require('express');
+const multer =require('multer')
 const Post = require('../models/post')
 
 const router = exprss.Router();
 
+const MIME_TYPE_MAP={
+  'image/png':'png',
+  'image/jpeg':'jpeg',
+  'image/jpg':'jpg'
+}
+
+const storage = multer.diskStorage({
+  destination:(req,file,cb)=>{
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    console.log(file.mimetype);
+    let error = new Error("Invalid mime type");
+    if(isValid){
+      error = null;
+    }
+    cb(error,"backend/images");
+  },
+  filename:(req,file,cb)=>{
+    const name = file.originalname.toLowerCase().split(' ').join('-')
+    const extension = MIME_TYPE_MAP[file.mimetype]
+    cb(null,name+'-'+Date.now()+'.'+extension);
+  }
+})
 
 
-router.post("", (req, res, next) => {
 
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-
-  post.save().then(createdPost => {
-    res.status(201).json({
-      message: 'Post added Successfully',
-      postId: createdPost._id
+router.post("",multer({ storage: storage }).single("image"),(req, res, next) => {
+    const url = req.protocol + "://" + req.get("host");
+    const post = new Post({
+      title: req.body.title,
+      content: req.body.content,
+      imagePath: url + "/images/" + req.file.filename
     });
-  });
-});
+    post.save().then(createdPost => {
+      res.status(201).json({
+        message: "Post added successfully",
+        post: {
+          ...createdPost._doc,
+          id: createdPost._id
+        }
+      });
+    });
+  }
+);
 
-router.put("/:id", (req, res, next) => {
+router.put("/:id",multer({ storage: storage }).single("image") , (req, res, next) => {
+
+  // imagePath is either the path we already has or the path of the newly uploaded image
+  let imagePath = req.body.imagePath;  // the default
+  if( req.file){  // detect a new file was uploaded
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
+  }
 
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
-    content: req.body.content
-  })
+    content: req.body.content,
+    imagePath:imagePath
+  });
+
+  console.log("updated--post " + post);
 
   Post.updateOne({ _id: req.params.id }, post)
     .then((result) => {

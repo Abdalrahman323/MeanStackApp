@@ -21,7 +21,7 @@ export class PostCreateComponent implements OnInit {
   private postId: string;
 
   constructor(private postsService: PostsService, private route: ActivatedRoute) {
-    this.post = { id: '', title: '', content: '' };
+    this.post = { id: '', title: '', content: '' ,imagePath:'' };
   }
 
   ngOnInit() {
@@ -36,15 +36,22 @@ export class PostCreateComponent implements OnInit {
         this.isLoading = true;
         this.postsService.getPost(this.postId)
           .subscribe(postData => {
+        // console.log(JSON.stringify(postData));
 
-            this.post = { id: postData._id, title: postData.title, content: postData.content };
+            this.post = {
+              id: postData._id,
+               title: postData.title,
+              content: postData.content ,
+              imagePath: postData.imagePath
+              };
             this.isLoading = false;
 
             // populate the form with intial values
             this.form.setValue(
               {
                 'title': this.post.title,
-                'content': this.post.content
+                'content': this.post.content,
+                'image':this.post.imagePath
               });
           })
       }
@@ -93,9 +100,9 @@ export class PostCreateComponent implements OnInit {
     this.post.content = this.form.value.content;
 
     if (this.mode === 'create')
-      this.postsService.addPost(this.post);
+      this.postsService.createPost(this.post,this.form.value.image);
     else
-      this.postsService.updatePost(this.postId, this.post)
+      this.postsService.updatePost(this.postId, this.post,this.form.value.image);
 
     // this.form.reset();
 

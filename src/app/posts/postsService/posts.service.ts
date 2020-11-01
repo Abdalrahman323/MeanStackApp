@@ -4,6 +4,7 @@ import { Subject } from 'rxjs'
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators'
 import { Router } from '@angular/router';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class PostsService {
           return {
             title: post.title,
             content: post.content,
-            id: post._id
+            id: post._id,
+            imagePath: post.imagePath
           };
 
         });
@@ -36,27 +38,58 @@ export class PostsService {
   }
 
   getPost(postId) {
-    return this.httpclient.get<{_id:string; title:string;content:string}>("http://localhost:3000/api/posts/"+ postId);
-  }
+    return this.httpclient.get<{ _id: string, title: string, content: string, imagePath: string }>(
+      "http://localhost:3000/api/posts/" + postId
+      );
+    }
 
   getPostUpdateListener() {
     return this.postUpdated.asObservable();
   }
 
-  addPost(post: Post) {
-    this.httpclient.post<{ message: string, postId: string }>("http://localhost:3000/api/posts", post)
+  createPost(post: Post , image:File ) {
+    const postData = new FormData();
+    postData.append("title",post.title);
+    postData.append("content",post.content);
+    postData.append("image",image,post.title)
+
+
+    this.httpclient.post<{ message: string; post: Post }>
+    ("http://localhost:3000/api/posts", postData)
       .subscribe(resData => {
-        const id = resData.postId;
-        post.id = id;  // generated id from MongoDb
-        this.posts.push(post);
+        const createdPost:Post = {
+          id:resData.post.id,
+          title:post.title,
+          content :post.content,
+          imagePath: resData.post.imagePath
+        };
+
+        this.posts.push(createdPost);
         // push notification
         this.postUpdated.next([... this.posts]);
         this.router.navigate(["/"])
       })
   }
 
-  updatePost (postId:string , post:Post){
-    this.httpclient.put("http://localhost:3000/api/posts/" + postId,post)
+  updatePost (postId:string , post:Post , image:File | string) {
+    let postData : Post | FormData;
+    if(typeof(image) ==='object'){ // case uploading a new post
+      postData = new FormData();
+      postData.append("id",postId);
+      postData.append("title",post.title);
+      postData.append("content",post.content);
+      postData.append("image",image,post.title);
+    } else{  // case not uploading a new image
+
+      postData ={
+        id: postId,
+        title:post.title,
+        content:post.content,
+        imagePath:image
+      }
+
+    }
+    this.httpclient.put("http://localhost:3000/api/posts/" + postId,postData)
     .subscribe((res) =>{
       //  No need for it ;as when we visit postList page we call backend
 
