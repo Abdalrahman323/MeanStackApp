@@ -11,16 +11,15 @@ const MIME_TYPE_MAP={
 }
 
 const storage = multer.diskStorage({
-  destination:(req,file,cb)=>{
+  destination:(req,file,cb)=>{          // where you want to save it
     const isValid = MIME_TYPE_MAP[file.mimetype];
-    console.log(file.mimetype);
     let error = new Error("Invalid mime type");
     if(isValid){
       error = null;
     }
     cb(error,"backend/images");
   },
-  filename:(req,file,cb)=>{
+  filename:(req,file,cb)=>{             // what name of the saved file
     const name = file.originalname.toLowerCase().split(' ').join('-')
     const extension = MIME_TYPE_MAP[file.mimetype]
     cb(null,name+'-'+Date.now()+'.'+extension);
@@ -64,7 +63,6 @@ router.put("/:id",multer({ storage: storage }).single("image") , (req, res, next
     imagePath:imagePath
   });
 
-  console.log("updated--post " + post);
 
   Post.updateOne({ _id: req.params.id }, post)
     .then((result) => {
@@ -76,13 +74,31 @@ router.put("/:id",multer({ storage: storage }).single("image") , (req, res, next
 
 router.get('', (req, res, next) => {  // middleware
 
-  Post.find()
-    .then(documents => {
+  const pageSize= +req.query.pagesize;
+  const currentPage= +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts;
+
+  if(pageSize && currentPage){
+    // adjust query to select slice piece of posts
+    // ##important this will still execute a query on all elements on database, this how it works
+    // so,for very large dataset this could be
+    // console.log("Page size is = " + pageSize+" CurrentPage is = "+currentPage);
+    postQuery
+    .skip(pageSize *(currentPage-1))
+    .limit(pageSize)
+  }
+  postQuery.then(documents => {
+      fetchedPosts =documents;
+      return Post.count();
+    }).then(count =>{
+      /// here i create my response
       res.status(200).json({
         message: 'Posts fetched successfully',
-        posts: documents
+        fetchedPosts: fetchedPosts,
+        maxPosts:count
       });
-    });
+    })
 
 
 });
