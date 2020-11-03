@@ -52,8 +52,8 @@ User.findOne({email:req.body.email})
         }
         // we have a valid password
         // let's continue and create JWT
-        // this method create a new token based on some input data of your choice
-        console.log(fetchedUser.email,fetchedUser._id);
+        // this method create a new token based on some input data of your choice here we used (email , user_id)
+        console.log("logged in user "+fetchedUser.email,fetchedUser._id);
         const token = jwt.sign({email: fetchedUser.email , userId:fetchedUser._id },
                       "secret_gsdgsdgwegfw3",
                       {expiresIn: "1hr"})

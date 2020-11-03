@@ -1,6 +1,7 @@
 const exprss = require('express');
 const multer =require('multer')
 const Post = require('../models/post')
+const checkAuth = require('../middleware/check-auth')
 
 const router = exprss.Router();
 
@@ -28,7 +29,8 @@ const storage = multer.diskStorage({
 
 
 
-router.post("",multer({ storage: storage }).single("image"),(req, res, next) => {
+router.post("",checkAuth,multer({ storage: storage }).single("image"),
+    (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     const post = new Post({
       title: req.body.title,
@@ -47,7 +49,8 @@ router.post("",multer({ storage: storage }).single("image"),(req, res, next) => 
   }
 );
 
-router.put("/:id",multer({ storage: storage }).single("image") , (req, res, next) => {
+router.put("/:id",checkAuth,multer({ storage: storage }).single("image") ,
+    (req, res, next) => {
 
   // imagePath is either the path we already has or the path of the newly uploaded image
   let imagePath = req.body.imagePath;  // the default
@@ -90,7 +93,7 @@ router.get('', (req, res, next) => {  // middleware
   }
   postQuery.then(documents => {
       fetchedPosts =documents;
-      return Post.count();
+      return Post.countDocuments();
     }).then(count =>{
       /// here i create my response
       res.status(200).json({
@@ -115,7 +118,7 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id",checkAuth, (req, res, next) => {
   Post.deleteOne({
     _id: req.params.id
   })

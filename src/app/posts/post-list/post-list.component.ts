@@ -12,7 +12,7 @@ import { PageEvent } from '@angular/material/paginator';
 export class PostListComponent implements OnInit , OnDestroy {
 
   totalPosts = 0;
-  postsPerPage = 2;
+  postsPerPage = 5;
   currentPageNumber =1;
 
 

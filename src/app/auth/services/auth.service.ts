@@ -6,8 +6,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
+  private token:string;
 
   constructor(private httpClient :HttpClient) { }
+  getToken(){
+    return this.token;
+  }
 
   createUser(email:string,password:string){
     const authdata:AuthData = {
@@ -16,7 +20,7 @@ export class AuthService {
     }
     this.httpClient.post("http://localhost:3000/api/user/signup",authdata)
     .subscribe(response =>{
-      console.log(response);
+      // console.log(response);
     })
   }
   login(email :string , password :string){
@@ -24,9 +28,9 @@ export class AuthService {
       email:email,
       password:password
     }
-    this.httpClient.post("http://localhost:3000/api/user/login",authdata)
+    this.httpClient.post<{token:string}>("http://localhost:3000/api/user/login",authdata)
     .subscribe(response => {
-      console.log(response);
+      this.token = response.token;
 
     })
 
