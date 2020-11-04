@@ -14,6 +14,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private changeTokenSubscription: Subscription;
 
   ngOnInit(): void {
+    // to update on reload
+    this.isUserAuthenticated = this.authService.getIsAuth();
+    // to update on the flow
     this.changeTokenSubscription = this.authService.getAuthStatusListener().subscribe((isAuthenticated) => {
       this.isUserAuthenticated = isAuthenticated;
     });
