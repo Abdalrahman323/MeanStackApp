@@ -36,13 +36,13 @@ export class PostCreateComponent implements OnInit {
         this.isLoading = true;
         this.postsService.getPost(this.postId)
           .subscribe(postData => {
-        // console.log(JSON.stringify(postData));
 
             this.post = {
               id: postData._id,
-               title: postData.title,
+              title: postData.title,
               content: postData.content ,
-              imagePath: postData.imagePath
+              imagePath: postData.imagePath,
+              creator: postData.creator
               };
             this.isLoading = false;
 

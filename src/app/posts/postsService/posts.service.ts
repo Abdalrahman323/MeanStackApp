@@ -28,7 +28,8 @@ export class PostsService {
                       title: post.title,
                       content: post.content,
                       id: post._id,
-                      imagePath: post.imagePath
+                      imagePath: post.imagePath,
+                      creator: post.creator
                     };
 
                   }),
@@ -36,6 +37,7 @@ export class PostsService {
             }
       })))
       .subscribe((transformedPostsData) => {
+
         this.posts = transformedPostsData.posts;
         this.postUpdated.next({posts:[...this.posts],postCount: transformedPostsData.maxPosts});
       });
@@ -44,7 +46,7 @@ export class PostsService {
   }
 
   getPost(postId) {
-    return this.httpclient.get<{ _id: string, title: string, content: string, imagePath: string }>(
+    return this.httpclient.get<{ _id: string, title: string, content: string, imagePath: string , creator:string }>(
       "http://localhost:3000/api/posts/" + postId
     );
   }

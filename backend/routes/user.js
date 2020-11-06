@@ -42,7 +42,9 @@ router.post("/login", (req, res, next) => {
       if (!user) {  // if user email doesn't exist in database
         return res.status(401).json({ message: "Auth Fail" });
       }
-      // compare password user entered with the password stored in the database (hashed) , we can't unhash
+      // compare password user entered with the password stored in the database (hashed)
+      // enter these 2 passwords to the same encrypted algorithms and see if they produce the same output or not
+      // , we can't unhash
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password);
     })
@@ -53,13 +55,13 @@ router.post("/login", (req, res, next) => {
       // we have a valid password
       // let's continue and create JWT
       // this method create a new token based on some input data of your choice here we used (email , user_id)
-      console.log("logged in user " + fetchedUser.email, fetchedUser._id);
       const token = jwt.sign({ email: fetchedUser.email, userId: fetchedUser._id },
         "secret_gsdgsdgwegfw3",
         { expiresIn: "1hr" })
 
       res.status(200).json({
         token: token,
+        userId:fetchedUser._id,
         expiresIn:3600
       });
     })
