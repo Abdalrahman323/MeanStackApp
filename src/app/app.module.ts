@@ -1,4 +1,5 @@
 import { AuthInterceptorService } from './auth/services/auth-interceptor.service';
+import {ErrorInterceptor} from './error-interceptor'
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -13,10 +14,11 @@ import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import { HeaderComponent } from './header/header.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { PostListComponent } from './posts/post-list/post-list.component';
+import {PostListComponent } from './posts/post-list/post-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatPaginatorModule} from '@angular/material/paginator';
+
 import { LoginComponent } from './auth/components/login/login.component';
 import { SignupComponent } from './auth/components/signup/signup.component';
 
@@ -48,7 +50,9 @@ import { SignupComponent } from './auth/components/signup/signup.component';
     AppRoutingModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS ,useClass: AuthInterceptorService ,multi :true}
+    {provide: HTTP_INTERCEPTORS ,useClass: AuthInterceptorService ,multi :true},
+    {provide: HTTP_INTERCEPTORS ,useClass: ErrorInterceptor ,multi :true}
+
   ],
   bootstrap: [
     AppComponent
