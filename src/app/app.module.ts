@@ -18,10 +18,12 @@ import {PostListComponent } from './posts/post-list/post-list.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 import { LoginComponent } from './auth/components/login/login.component';
 import { SignupComponent } from './auth/components/signup/signup.component';
-
+import {ErrorComponent} from'./error/error.component'
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { SignupComponent } from './auth/components/signup/signup.component';
     PostListComponent,
     LoginComponent,
     SignupComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +41,7 @@ import { SignupComponent } from './auth/components/signup/signup.component';
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
+
     MatInputModule,
     MatCardModule,
     MatButtonModule,
@@ -45,6 +49,7 @@ import { SignupComponent } from './auth/components/signup/signup.component';
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
+    MatDialogModule,
 
     HttpClientModule,
     AppRoutingModule
@@ -56,6 +61,9 @@ import { SignupComponent } from './auth/components/signup/signup.component';
   ],
   bootstrap: [
     AppComponent
+  ],
+  entryComponents:[
+    ErrorComponent
   ]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 const exprss = require('express');
 const multer =require('multer')
 const Post = require('../models/post')
-const checkAuth = require('../middleware/check-auth')
+const checkAuth = require('../middleware/check-auth');
 
 const router = exprss.Router();
 
@@ -46,6 +46,11 @@ router.post("",checkAuth,multer({ storage: storage }).single("image"),
           id: createdPost._id
         }
       });
+    })
+    .catch(error =>{
+      res.status(500).json({
+        message:"Creating a post failed!"
+      })
     });
   }
 );
@@ -81,6 +86,11 @@ router.put("/:id",checkAuth,multer({ storage: storage }).single("image") ,
         });
 
       }
+    })
+    .catch(error =>{  // if something goes wrong techically in the above code 
+      res.status(500).json({
+        message: "Coudn't update post!"
+      })
     });
 });
 
@@ -111,6 +121,11 @@ router.get('', (req, res, next) => {  // middleware
         maxPosts:count
       });
     })
+    .catch(error =>{
+      res.status(500).json({
+        message:"Fetching posts failed!"
+      })
+    });
 
 
 });
@@ -124,6 +139,11 @@ router.get('/:id', (req, res, next) => {
       } else {
         res.status(404).json({ message: 'Post not found' });
       }
+    })
+    .catch(error =>{
+      res.status(500).json({
+        message:"Fetching post failed!"
+      })
     });
 });
 
@@ -133,7 +153,7 @@ router.delete("/:id",checkAuth, (req, res, next) => {
 
       if(result.deletednCount >0){
         res.status(200).json({
-          message: 'Deletion succeful successful'
+          message: 'Deletion successful'
         });
       } else {
         res.status(401).json({
@@ -142,6 +162,11 @@ router.delete("/:id",checkAuth, (req, res, next) => {
 
       }
     })
+    .catch(error =>{
+      res.status(500).json({
+        message:"Deleting post failed!"
+      })
+    });
 });
 
 module.exports =router;

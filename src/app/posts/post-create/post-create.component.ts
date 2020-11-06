@@ -1,18 +1,21 @@
 import { PostsService } from './../postsService/posts.service';
 import { Post } from './../post.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import {mimeType} from "./mime-type.validator"
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/services/auth.service';
 @Component({
   selector: 'post-create',
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit ,OnDestroy {
 
   post: Post;
   isLoading = false;
+  private authStatusSubscription :Subscription;
 
   form: FormGroup;
   imagePreview;
@@ -20,12 +23,20 @@ export class PostCreateComponent implements OnInit {
   private mode = 'create'
   private postId: string;
 
-  constructor(private postsService: PostsService, private route: ActivatedRoute) {
+  constructor(
+    private postsService: PostsService,
+    private route: ActivatedRoute,
+    private authService :AuthService) {
+
     this.post = { id: '', title: '', content: '' ,imagePath:'' };
   }
-
+  
   ngOnInit() {
 
+    this.authStatusSubscription =this.authService.getAuthStatusListener()
+    .subscribe(authStatus =>{
+      this.isLoading = false;
+    });
     this.intalizeForm()
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -107,5 +118,10 @@ export class PostCreateComponent implements OnInit {
     // this.form.reset();
 
   }
+
+  ngOnDestroy(): void {
+    this.authStatusSubscription.unsubscribe();
+  }
+
 
 }

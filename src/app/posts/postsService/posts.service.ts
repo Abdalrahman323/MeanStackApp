@@ -78,7 +78,10 @@ export class PostsService {
         // // push notification
         // this.postUpdated.next([... this.posts]);
         this.router.navigate(["/"])
-      })
+      },error =>{
+        console.log("unable to create new post");
+        
+      });
   }
 
   updatePost(postId: string, post: Post, image: File | string) {
@@ -110,6 +113,9 @@ export class PostsService {
         //  this.postUpdated.next([...this.posts])
         this.router.navigate(["/"])
 
+      },error =>{
+        console.log("unable update post");
+        
       });
 
 

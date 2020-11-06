@@ -41,7 +41,7 @@ export class PostListComponent implements OnInit , OnDestroy {
       this.posts = postData.posts;
       this.totalPosts = postData.postCount;
       this.isLoading = false;
-    })
+    });
 
     // first visit of the page
     this.isUserAuthenticated = this.authService.getIsAuth();
@@ -57,6 +57,8 @@ export class PostListComponent implements OnInit , OnDestroy {
     this.isLoading =true;
     this.postsService.deletePost(postId).subscribe(()=>{
         this.postsService.getPosts(this.postsPerPage,this.currentPageNumber);
+    },error=>{
+      this.isLoading = false;
     });
   }
   OnChangePage(pageData:PageEvent){
