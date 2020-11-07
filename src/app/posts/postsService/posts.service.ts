@@ -115,7 +115,6 @@ export class PostsService {
 
       },error =>{
         console.log("unable update post");
-        
       });
 
 
