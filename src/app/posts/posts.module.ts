@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {ReactiveFormsModule } from '@angular/forms'
 
-import {PostListComponent } from './post-list/post-list.component';
-import { PostCreateComponent } from './post-create/post-create.component';
+import {PostListComponent } from './components/post-list/post-list.component';
+import { PostCreateComponent } from './components/post-create/post-create.component';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 
 

@@ -1,5 +1,5 @@
-import { PostsService } from './../postsService/posts.service';
-import { Post } from './../post.model';
+import { PostsService } from '../../postsService/posts.service';
+import { Post } from '../../post.model';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';

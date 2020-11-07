@@ -1,9 +1,9 @@
 import { AuthGuardService } from './../auth/services/auth-guard.service';
-import { PostListComponent } from './../posts/post-list/post-list.component';
+import { PostListComponent } from '../posts/components/post-list/post-list.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule } from '@angular/router'
-import { PostCreateComponent } from '../posts/post-create/post-create.component';
+import { PostCreateComponent } from '../posts/components/post-create/post-create.component';
 import { LoginComponent } from '../auth/components/login/login.component';
 import { SignupComponent } from '../auth/components/signup/signup.component';
 
