@@ -4,8 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule } from '@angular/router'
 import { PostCreateComponent } from '../posts/components/post-create/post-create.component';
-import { LoginComponent } from '../auth/components/login/login.component';
-import { SignupComponent } from '../auth/components/signup/signup.component';
+
 
 // const routes: Routes =[
 //   {path:'',component:PostListComponent},
@@ -18,8 +17,6 @@ import { SignupComponent } from '../auth/components/signup/signup.component';
     CommonModule,
     RouterModule.forRoot(
     [
-      {path:'login',component:LoginComponent},
-      {path:'signup',component: SignupComponent},
       {path:'',component:PostListComponent},
       {path:'create',component:PostCreateComponent , canActivate:[AuthGuardService]},
       {path:'edit/:postId',component:PostCreateComponent ,  canActivate:[AuthGuardService]}

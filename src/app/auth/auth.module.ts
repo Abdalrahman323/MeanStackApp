@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -13,6 +14,10 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
     SignupComponent,
   ],
   imports: [
+    RouterModule.forChild([
+      {path:'login',component:LoginComponent},
+      {path:'signup',component: SignupComponent}
+  ]),
     CommonModule,
     AngularMaterialModule,
     FormsModule
