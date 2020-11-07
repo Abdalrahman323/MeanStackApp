@@ -43,7 +43,7 @@ exports.updatePost =(req, res, next) => {
     // to check Authorization nModified will be 0 if the user is unAuthorized
     Post.updateOne({ _id: req.params.id ,creator:req.userData.userId }, post)
       .then((result) => {
-        if(result.nModified >0){
+        if(result.n >0){
           res.status(200).json({
             message: 'update successful'
           });
@@ -117,8 +117,7 @@ exports.getPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     Post.deleteOne({_id: req.params.id , creator:req.userData.userId})
       .then(result => {
-  
-        if(result.deletednCount >0){
+        if(result.n >0){
           res.status(200).json({
             message: 'Deletion successful'
           });
