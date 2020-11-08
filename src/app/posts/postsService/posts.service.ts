@@ -4,8 +4,9 @@ import { Subject } from 'rxjs'
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators'
 import { Router } from '@angular/router';
-import { identifierModuleUrl } from '@angular/compiler';
+import {environment} from '../../../environments/environment'
 
+const Backend_URL = environment.apiURL +'/posts'
 @Injectable({
   providedIn: 'root'
 })
@@ -19,7 +20,8 @@ export class PostsService {
   getPosts(postsPerPage: number, currentPageNumber: number) {
 
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPageNumber}`;
-    this.httpclient.get<{ message: string, fetchedPosts: any , maxPosts:number }>('http://localhost:3000/api/posts' + queryParams)
+    this.httpclient.get<{ message: string, fetchedPosts: any , maxPosts:number }>
+    (Backend_URL + queryParams)
       .pipe(map((postData => {
 
         return  {
@@ -47,7 +49,7 @@ export class PostsService {
 
   getPost(postId) {
     return this.httpclient.get<{ _id: string, title: string, content: string, imagePath: string , creator:string }>(
-      "http://localhost:3000/api/posts/" + postId
+      Backend_URL+"/" + postId
     );
   }
 
@@ -63,7 +65,7 @@ export class PostsService {
 
 
     this.httpclient.post<{ message: string; post: Post }>
-      ("http://localhost:3000/api/posts", postData)
+      (Backend_URL, postData)
       .subscribe(resData => {
         // No need in our case as we well navigate to postlist component
 
@@ -102,7 +104,7 @@ export class PostsService {
       }
 
     }
-    this.httpclient.put("http://localhost:3000/api/posts/" + postId, postData)
+    this.httpclient.put(Backend_URL+"/" + postId, postData)
       .subscribe((res) => {
         //  No need for it ;as when we visit postList page we call backend
 
@@ -121,6 +123,6 @@ export class PostsService {
   }
 
   deletePost(postId: string) {
-    return this.httpclient.delete("http://localhost:3000/api/posts/" + postId);
+    return this.httpclient.delete(Backend_URL +"/" + postId);
   }
 }
