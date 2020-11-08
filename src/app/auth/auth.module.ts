@@ -21,6 +21,9 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     AngularMaterialModule,
     FormsModule
+  ],
+  exports:[
+    RouterModule
   ]
 })
 export class AuthModule { }
