@@ -53,7 +53,7 @@ exports.userLogin = (req, res, next) => {
         // let's continue and create JWT
         // this method create a new token based on some input data of your choice here we used (email , user_id)
         const token = jwt.sign({ email: fetchedUser.email, userId: fetchedUser._id },
-          "secret_gsdgsdgwegfw3",
+          process.env.JWT_KEY,
           { expiresIn: "1hr" })
   
         res.status(200).json({
