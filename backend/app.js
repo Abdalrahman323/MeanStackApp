@@ -20,7 +20,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.M
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); //
-app.use("/images",express.static(path.join("backend/images"))) // // means any request target / images will be allowed to continue and fetch their files from there
+app.use("/images",express.static(path.join("images"))) // // means any request target / images will be allowed to continue and fetch their files from there
 
 // this middleware for all incoming requests
 app.use((req, res, next) => {
