@@ -3,6 +3,9 @@
 .env
 nodemon.json
 /backend/images/
+.firebase
+firebase.json
+.firebaserc
 # compiled output
 /dist
 /tmp

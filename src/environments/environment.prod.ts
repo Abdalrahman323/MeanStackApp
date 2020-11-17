@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiURL: "https://angular-node-ll.herokuapp.com/api"
+  apiURL: "http://nodeangularenviroment2-env.eba-wpxz3kke.us-east-2.elasticbeanstalk.com/api"
 
 };
